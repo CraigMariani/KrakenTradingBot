@@ -12,8 +12,8 @@ kraken = ccxt.kraken({
 
 ##############################
 # fetch the current markets
-# pprint(kraken.fetch_balance())
-
+pprint(kraken.fetch_balance())
+pprint(kraken.fetch_positions().methods)
 ##############################
 # fetch ticker labels
 # markets = kraken.fetch_markets()
@@ -86,38 +86,38 @@ price = 60000 # price we buy at
 
 ##########################
 # now lets try this again but we will change the order based on what we get from our order book
-def run_bot():
-    book = kraken.fetch_order_book(symbol)
-    bids = book['bids']
-    asks = book['asks']
+# def run_bot():
+#     book = kraken.fetch_order_book(symbol)
+#     bids = book['bids']
+#     asks = book['asks']
 
-    bid = bids[0][0] 
-    ask = asks[0][0] 
-    spread = (ask - bid) 
-    print('*')
-    if spread < 0.001:
-        print('price')
-        price = ask
-        print('bought {amount} at {ask}'.format(amount=amount, ask=ask))
+#     bid = bids[0][0] 
+#     ask = asks[0][0] 
+#     spread = (ask - bid) 
+#     print('*')
+#     if spread < 0.001:
+#         print('price')
+#         price = ask
+#         print('bought {amount} at {ask}'.format(amount=amount, ask=ask))
     
-    else:
-        price = ask - 1000
-        print('No purchase')
+#     else:
+#         price = ask - 1000
+#         print('No purchase')
     
-    print('**')
-    print('\n spread: {spread} \n bid: {bid} \n ask: {ask}'.format(spread=spread, bid=bid ,ask=ask))
-    kraken.create_order(symbol, order_type, side, amount, price)
-    time.sleep(5)
-    kraken.cancel_all_orders(symbol)
+#     print('**')
+#     print('\n spread: {spread} \n bid: {bid} \n ask: {ask}'.format(spread=spread, bid=bid ,ask=ask))
+#     kraken.create_order(symbol, order_type, side, amount, price)
+#     time.sleep(5)
+#     kraken.cancel_all_orders(symbol)
     
 
-# set a scheduled task to run every 2 seconds
-schedule.every(2).seconds.do(run_bot)
+# # set a scheduled task to run every 2 seconds
+# schedule.every(2).seconds.do(run_bot)
 
-# loop that checks for scheduled task and prints error message when not run correctly
-while True:
-    try: 
-        schedule.run_pending()
-    except Exception as e:
-        print('ERROR {}'.format(e))
-        time.sleep(60)
+# # loop that checks for scheduled task and prints error message when not run correctly
+# while True:
+#     try: 
+#         schedule.run_pending()
+#     except Exception as e:
+#         print('ERROR {}'.format(e))
+#         time.sleep(60)
