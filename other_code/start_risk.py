@@ -25,22 +25,34 @@ def open_positions(symbol=symbol):
 
     # what is the position index for that symbol?
     if symbol == 'BTC/USD':
-        index_pos = 1
+        index_pos = 'BTC'
     elif symbol == 'ETH/USD':
-        index_pos = 0
+        index_pos = 'ETH'
 
     else:
         index_pos = None 
 
     
     bal = kraken.fetch_balance()
-    open_positions = bal['info']['data']['positions']
+    print('***')
+    print('showing balance')
+    pprint(bal)
+    print('')
+    open_positions = bal['used']
+    print('****')
+    print('showing open positions')
     print(open_positions)
 
+    # use this method to get the side and size for our open positions
+    orders = kraken.fetchOpenOrders(symbol=symbol)
+    print('*****')
+    print('showing orders')
+    pprint(orders) 
 # dictionaries 
-    openpos_side = open_positions[index_pos]['side'] 
-    openpos_size = open_positions[index_pos]['size']
-    #print(open_positions)
+    #openpos_side = open_positions[index_pos]['side'] 
+    openpos_size = open_positions[index_pos]
+    print('showing open positions')
+    print(open_positions)
 
 # if statements 
     if openpos_side == ('Buy'):
@@ -73,7 +85,7 @@ def ask_bid(symbol=symbol):
 
     return ask, bid # ask_bid()[0] = ask , [1] = bid
 
-########## kill switch
+########## kill switch (1)
 
 def kill_switch(symbol=symbol):
 
@@ -215,4 +227,5 @@ def size_kill():
         print(f'size kill check: current position cost is: {pos_cost} we are gucci')
 
 if __name__ == '__main__':
-    pnl_close(symbol='BTC/USD', target=65000, max_loss=10)
+    #pnl_close(symbol='BTC/USD', target=65000, max_loss=10)
+    open_positions(symbol='ETH/USD')

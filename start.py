@@ -1,5 +1,5 @@
 import ccxt
-from keys import Keys  as k
+from keys2 import Keys  as k
 import time , schedule 
 from pprint import pprint
 ################################
@@ -12,8 +12,14 @@ kraken = ccxt.kraken({
 
 ##############################
 # fetch the current markets
+
+# fetch the current balance/positions
+print('**** fetching balance ****')
 pprint(kraken.fetch_balance())
-pprint(kraken.fetch_positions().methods)
+
+# T
+print('**** fetching positions ****')
+pprint(kraken.fetch_positions())
 ##############################
 # fetch ticker labels
 # markets = kraken.fetch_markets()
