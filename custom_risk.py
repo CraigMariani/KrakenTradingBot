@@ -31,10 +31,11 @@ def ask_bid(symbol):
     #pprint(ob)
 
     bid = ob['bids'][0][0]
-    ask = ob['asks'][0][0]
+    ask = ob['asks'][0][0]  
 
     print(f'ask for {symbol} : {ask}')
     print(f'bid for {symbol} : {bid}')
+    pprint(ob)
     return ask, bid # ask_bid()[0] = ask , [1] = bid
 
 # determine if favorable position to enter in on and execute
@@ -43,7 +44,7 @@ def enter_pos(symbol, amount):
     ask, bid = ask_bid(symbol)
     spread = (ask - bid) 
 
-    if spread < 0.1:
+    if spread < 0.001:
         price = ask
         print('good spread, entering at asking price')
         
@@ -53,19 +54,19 @@ def enter_pos(symbol, amount):
         print('bad spread purchase at lower amount')
 
     # create a stop limit order based on price, if it goes to low we abort the order
-    # kraken.create_stop_limit_order(
-    #         symbol=symbol,
-    #         side='buy',
-    #         amount=amount,
-    #         price=price,
-    #         stopPrice=price - 100)
-    
-    # market order for experimenting with kill switch
-    kraken.create_market_order(
+    kraken.create_stop_limit_order(
             symbol=symbol,
             side='buy',
             amount=amount,
-            price=price)
+            price=price,
+            stopPrice=price - 100)
+    
+    # market order for experimenting with kill switch
+    # kraken.create_market_order(
+    #         symbol=symbol,
+    #         side='buy',
+    #         amount=amount,
+    #         price=price)
     
     # for tracking the positions we enter
     global order_ids 
@@ -171,16 +172,13 @@ if __name__ == '__main__':
     
     order_ids = np.array([])
 
-    #ask_bid(symbol)
-    # schedule.every(2).seconds.do(enter_pos(symbol, amount))
-
-    # while True:
-
-        
-    #     # schedule.run_pending()
-    #     enter_pos(symbol=symbol, amount=amount)
-    #     time.sleep(300)
+    # ask_bid(symbol)
+    # enter_pos(symbol=symbol, amount=amount)
+    # pnl_close(symbol=symbol, in_pos=False)
+    # kill_switch(symbol=symbol, in_pos=True)
+ 
+    while True:
+        enter_pos(symbol=symbol, amount=amount)
+        pnl_close(symbol=symbol, in_pos=False)
+        time.sleep(300)
     
-    enter_pos(symbol, amount)
-    # print(pnl_close(symbol))
-    kill_switch(symbol=symbol, in_pos=True)
